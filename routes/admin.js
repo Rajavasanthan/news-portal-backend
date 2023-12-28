@@ -1,15 +1,15 @@
 var express = require("express");
 const { firebaseApp } = require("../library/firebase");
-const { Admin } = require("../model/admin")
 var router = express.Router();
 const jwt = require("jsonwebtoken");
+const { User } = require("../model/user");
 
-router.post('/login-firebase', async (res, req) => {
+router.post('/login-firebase', async (req, res) => {
     try {
         const token = req.body.token;
         const decodedToken = await firebaseApp.auth().verifyIdToken(token);
         if (decodedToken.email) {
-            const admin = await Admin.findOne({ firebaseId: decodedToken.uid });
+            const admin = await User.findOne({ firebaseId: decodedToken.uid });
             if (admin) {
                 // Generate JWT token
                 const token = jwt.sign(
@@ -26,10 +26,11 @@ router.post('/login-firebase', async (res, req) => {
                     }
                 });
             } else {
-                let newAdmin = new Admin({
+                let newAdmin = new User({
                     name: decodedToken.name,
                     email: decodedToken.email,
                     firebaseId: decodedToken.uid,
+                    role: "admin"
                 });
                 await newAdmin.save();
                 // Generate JWT token

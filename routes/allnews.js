@@ -1,6 +1,6 @@
 var express = require("express");
 
-const News = require("../model/news")
+const {News} = require("../model/news")
 var router = express.Router();
 
 router.post("/create-news", async (req, res) => {
@@ -15,6 +15,16 @@ router.post("/create-news", async (req, res) => {
         });
         const savedNews = await newNews.save();
         res.status(201).json(savedNews);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
+router.get("/get-all-news",async (req,res) => {
+    try {
+        const allNews = await News.find({})
+        res.json(allNews)
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: "Internal Server Error" });
