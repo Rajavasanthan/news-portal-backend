@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 var adminsRouter = require('./routes/admin')
 var newsRouter = require('./routes/allnews')
 var fileRouter = require('./routes/file')
+var paymentRouter = require('./routes/payments')
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use('/users', usersRouter);
 app.use("/admin",adminsRouter);
 app.use("/news",newsRouter)
 app.use("/file",fileRouter)
+app.use("/payment",paymentRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
